@@ -47,12 +47,14 @@ class _ListViewUseState extends State<ListViewUse> {
                 ),
                 onRefresh: _handleRefresh),
             Container(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  alignment: Alignment.center,
-                  height: _isLoadMore ? 50 : 0,
-                  child: CircularProgressIndicator(),
-                ))
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: Colors.black54),
+                height: _isLoadMore ? 55 : 0,
+                child: CircularProgressIndicator(),
+              ),
+            ),
           ],
         ));
   }
@@ -61,7 +63,7 @@ class _ListViewUseState extends State<ListViewUse> {
     await Future.delayed(Duration(seconds: 1));
     _pageCount = 1;
     setState(() {
-      _words = _words.reversed.toList();
+      _words = _words.reversed.take(20).toList();
     });
   }
 
@@ -71,7 +73,7 @@ class _ListViewUseState extends State<ListViewUse> {
 
   Widget _item(String word) {
     return Container(
-      height: 50,
+      height: 55,
       decoration: BoxDecoration(color: Colors.green),
       margin: EdgeInsets.only(bottom: 2),
       alignment: Alignment.center,
