@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
 
   _banner() {
     return Container(
-      height: 160,
+      height: 180,
       child: Swiper(
         autoplay: true,
         itemCount: image_urls.length,
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     return Opacity(
       opacity: _appBarAlpha,
       child: Container(
-        height: 70,
+        height: 80,
         padding: EdgeInsets.only(top: 25),
         decoration: BoxDecoration(color: Colors.white),
         child: Center(
