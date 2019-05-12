@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_trip/dao/home_dao.dart';
+import 'package:flutter_trip/model/common_model.dart';
+
+import 'package:flutter_trip/widget/grid_nav.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 
@@ -17,36 +21,50 @@ class _HomePageState extends State<HomePage> {
 
   double _appBarAlpha = 0;
 
+  List<CommonModel> _localNavList;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0xfff2f2f2),
         //移除系统padding
         body: Stack(
-      children: <Widget>[
-        //添加滑动监听
-        NotificationListener(
-            onNotification: (notification) {
-              if (notification is ScrollUpdateNotification &&
-                  notification.depth == 0) {
-                _onScroll(notification.metrics.pixels);
-              }
-            },
-            child: MediaQuery.removePadding(
-              removeTop: true,
-              context: context,
-              child: ListView(
-                children: <Widget>[
-                  _banner(),
-                  Container(
-                    height: 1000,
-                    child: Text('haha'),
-                  )
-                ],
-              ),
-            )),
-        _appBar(),
-      ],
-    ));
+          children: <Widget>[
+            //添加滑动监听
+            NotificationListener(
+                onNotification: (notification) {
+                  if (notification is ScrollUpdateNotification &&
+                      notification.depth == 0) {
+                    _onScroll(notification.metrics.pixels);
+                  }
+                },
+                child: MediaQuery.removePadding(
+                  removeTop: true,
+                  context: context,
+                  child: ListView(
+                    children: <Widget>[
+                      _banner(),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        elevation: 3,
+                        margin: EdgeInsets.all(8),
+                        child: LocalGridNav(
+                          navList: _localNavList,
+                        ),
+                      )
+                    ],
+                  ),
+                )),
+            _appBar(),
+          ],
+        ));
   }
 
   _banner() {
@@ -91,5 +109,16 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _appBarAlpha = alpha;
     });
+  }
+
+  void _loadData() async {
+    try {
+      var homeModel = await HomeDao.fetch();
+      setState(() {
+        _localNavList = homeModel.localNavList;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }
