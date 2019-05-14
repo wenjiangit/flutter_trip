@@ -16,17 +16,6 @@ class _MyPageState extends State<MyPage> {
       body: ListView(
         children: <Widget>[
           _buildListItem('ListView用法', ListViewUse()),
-//          _buildListItem('listview', () {}),
-//          _buildListItem('listview', () {}),
-//          _buildListItem('listview'),
-//          _buildListItem('listview'),
-//          _buildListItem('listview'),
-//          _buildListItem('listview'),
-//          _buildListItem('listview'),
-//          _buildListItem('listview'),
-//          _buildListItem('listview'),
-//          _buildListItem('listview'),
-//          _buildListItem('listview'),
         ],
       ),
     );

@@ -29,7 +29,9 @@ class _WebViewState extends State<WebView> {
   @override
   void initState() {
     super.initState();
-    _onUrlChanged = webviewPlugin.onUrlChanged.listen((url) {});
+    _onUrlChanged = webviewPlugin.onUrlChanged.listen((url) {
+      print(url);
+    });
   }
 
   @override
