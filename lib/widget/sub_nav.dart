@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_trip/model/common_model.dart';
 import 'package:flutter_trip/widget/webview.dart';
 
-class LocalGridNav extends StatelessWidget {
+class SubNav extends StatelessWidget {
   final List<CommonModel> navList;
 
-  const LocalGridNav({Key key, this.navList}) : super(key: key);
+  const SubNav({Key key, this.navList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
-          color: Colors.white,borderRadius: BorderRadius.circular(8)),
+          color: Colors.white, borderRadius: BorderRadius.circular(6)),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        padding: EdgeInsets.symmetric(vertical: 8),
         child: _buildNav(context),
       ),
     );
@@ -22,14 +23,27 @@ class LocalGridNav extends StatelessWidget {
   Widget _buildNav(BuildContext context) {
     if (navList == null) return null;
     var list = navList.map((model) => _item(context, model)).toList();
-    return Row(
-      children: list,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final int separate = (navList.length / 2 + 0.5).toInt();
+    return Column(
+      children: <Widget>[
+        Row(
+          children: list.sublist(0, separate),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Row(
+            children: list.sublist(separate, navList.length),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+        )
+      ],
     );
   }
 
   Widget _item(BuildContext context, CommonModel model) {
-    return GestureDetector(
+    return Expanded(
+        child: GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return WebView(
@@ -44,8 +58,8 @@ class LocalGridNav extends StatelessWidget {
         children: <Widget>[
           Image.network(
             model.icon,
-            width: 32,
-            height: 32,
+            width: 22,
+            height: 22,
           ),
           Padding(
             padding: EdgeInsets.only(top: 5),
@@ -56,6 +70,6 @@ class LocalGridNav extends StatelessWidget {
           )
         ],
       ),
-    );
+    ));
   }
 }

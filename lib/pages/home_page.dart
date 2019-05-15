@@ -3,9 +3,12 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_trip/dao/home_dao.dart';
 import 'package:flutter_trip/model/common_model.dart';
 import 'package:flutter_trip/model/grid_nav_model.dart';
+import 'package:flutter_trip/model/sales_box_model.dart';
 
-import 'package:flutter_trip/widget/grid_nav.dart';
+import 'package:flutter_trip/widget/local_nav.dart';
 import 'package:flutter_trip/widget/mid_grid_nav.dart';
+import 'package:flutter_trip/widget/sales_box.dart';
+import 'package:flutter_trip/widget/sub_nav.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 
@@ -23,8 +26,10 @@ class _HomePageState extends State<HomePage> {
 
   double _appBarAlpha = 0;
 
-  List<CommonModel> _localNavList;
+  List<CommonModel> _localNavList = [];
+  List<CommonModel> _subNavList = [];
   GridNavModel _gridNavModel;
+  SalesBoxModel _salesBoxModel;
 
   @override
   void initState() {
@@ -55,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                       _banner(),
                       Card(
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                            borderRadius: BorderRadius.all(Radius.circular(6))),
                         elevation: 3,
                         margin: EdgeInsets.all(8),
                         child: LocalGridNav(
@@ -65,6 +70,18 @@ class _HomePageState extends State<HomePage> {
                       MidGridNav(
                         gridNavModel: _gridNavModel,
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 6),
+                        child: SubNav(
+                          navList: _subNavList,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 6),
+                        child: SalesBox(
+                          salesBoxModel: _salesBoxModel,
+                        ),
+                      )
                     ],
                   ),
                 )),
@@ -123,6 +140,8 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _localNavList = homeModel.localNavList;
         _gridNavModel = homeModel.gridNav;
+        _subNavList = homeModel.subNavList;
+        _salesBoxModel = homeModel.salesBox;
       });
     } catch (e) {
       print(e);

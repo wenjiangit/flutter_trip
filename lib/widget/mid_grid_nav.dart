@@ -3,16 +3,11 @@ import 'package:flutter_trip/model/common_model.dart';
 import 'package:flutter_trip/model/grid_nav_model.dart';
 import 'package:flutter_trip/widget/webview.dart';
 
-class MidGridNav extends StatefulWidget {
+class MidGridNav extends StatelessWidget {
   final GridNavModel gridNavModel;
 
   const MidGridNav({Key key, this.gridNavModel}) : super(key: key);
 
-  @override
-  _MidGridNavState createState() => _MidGridNavState();
-}
-
-class _MidGridNavState extends State<MidGridNav> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,9 +15,9 @@ class _MidGridNavState extends State<MidGridNav> {
       child: PhysicalModel(
         color: Colors.white,
         clipBehavior: Clip.antiAlias,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(6),
         child: Column(
-          children: _gridNavItems(context, widget.gridNavModel),
+          children: _gridNavItems(context, gridNavModel),
         ),
       ),
     );
@@ -32,25 +27,25 @@ class _MidGridNavState extends State<MidGridNav> {
     List<Widget> items = [];
     if (model == null) return items;
     if (model.hotel != null) {
-      items.add(_gridNavItem(model.hotel, true));
+      items.add(_gridNavItem(context, model.hotel, true));
     }
 
     if (model.flight != null) {
-      items.add(_gridNavItem(model.flight, false));
+      items.add(_gridNavItem(context, model.flight, false));
     }
 
     if (model.travel != null) {
-      items.add(_gridNavItem(model.travel, false));
+      items.add(_gridNavItem(context, model.travel, false));
     }
 
     return items;
   }
 
-  Widget _gridNavItem(GridNavItem item, bool first) {
+  Widget _gridNavItem(BuildContext context, GridNavItem item, bool first) {
     List<Widget> items = [];
-    items.add(_mainItem(item.mainItem));
-    items.add(_doubleItem(item.item1, item.item2));
-    items.add(_doubleItem(item.item3, item.item4));
+    items.add(_mainItem(context, item.mainItem));
+    items.add(_doubleItem(context, item.item1, item.item2));
+    items.add(_doubleItem(context, item.item3, item.item4));
 
     List<Widget> expandList = items
         .map((e) => Expanded(
@@ -72,51 +67,53 @@ class _MidGridNavState extends State<MidGridNav> {
     );
   }
 
-  Widget _mainItem(CommonModel item) {
-    return GestureDetector(
-      onTap: () {},
-      child: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        children: <Widget>[
-          Image.network(
-            item.icon,
-            fit: BoxFit.contain,
-            alignment: AlignmentDirectional.bottomCenter,
-            height: 88,
-            width: 121,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Text(
-              item.title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
+  Widget _mainItem(BuildContext context, CommonModel item) {
+    return _wrapGesture(
+        context,
+        Stack(
+          alignment: AlignmentDirectional.topCenter,
+          children: <Widget>[
+            Image.network(
+              item.icon,
+              fit: BoxFit.contain,
+              alignment: AlignmentDirectional.bottomCenter,
+              height: 88,
+              width: 121,
             ),
-          )
-        ],
-      ),
-    );
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text(
+                item.title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
+        ),
+        item);
   }
 
-  Widget _doubleItem(CommonModel top, CommonModel bottom) {
+  Widget _doubleItem(
+      BuildContext context, CommonModel top, CommonModel bottom) {
     return Column(
       children: <Widget>[
         Expanded(
-          child: _item(top, true),
+          child: _item(context, top, true),
         ),
         Expanded(
-          child: _item(bottom, false),
+          child: _item(context, bottom, false),
         )
       ],
     );
   }
 
-  Widget _item(CommonModel model, bool first) {
+  Widget _item(BuildContext context, CommonModel model, bool first) {
     BorderSide side = BorderSide(color: Colors.white, width: 0.8);
     return _wrapGesture(
+        context,
         FractionallySizedBox(
           widthFactor: 1,
           child: Container(
@@ -133,7 +130,7 @@ class _MidGridNavState extends State<MidGridNav> {
         model);
   }
 
-  Widget _wrapGesture(Widget child, CommonModel model) {
+  Widget _wrapGesture(BuildContext context, Widget child, CommonModel model) {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
