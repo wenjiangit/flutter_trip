@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _handleRefresh();
   }
 
   @override
@@ -55,42 +55,47 @@ class _HomePageState extends State<HomePage> {
                 child: MediaQuery.removePadding(
                   removeTop: true,
                   context: context,
-                  child: ListView(
-                    children: <Widget>[
-                      _banner(),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(6))),
-                        elevation: 3,
-                        margin: EdgeInsets.all(8),
-                        child: LocalGridNav(
-                          navList: _localNavList,
-                        ),
-                      ),
-                      MidGridNav(
-                        gridNavModel: _gridNavModel,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 6),
-                        child: SubNav(
-                          navList: _subNavList,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 6),
-                        child: SalesBox(
-                          salesBoxModel: _salesBoxModel,
-                        ),
-                      )
-                    ],
-                  ),
+                  child: RefreshIndicator(
+                      displacement: 50,
+                      child: _listView,
+                      onRefresh: _handleRefresh),
                 )),
-            _appBar(),
+            _appBar,
           ],
         ));
   }
 
-  _banner() {
+  Widget get _listView => ListView(
+        children: <Widget>[
+          _banner,
+          Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            elevation: 3,
+            margin: EdgeInsets.all(8),
+            child: LocalGridNav(
+              navList: _localNavList,
+            ),
+          ),
+          MidGridNav(
+            gridNavModel: _gridNavModel,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 6),
+            child: SubNav(
+              navList: _subNavList,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 6),
+            child: SalesBox(
+              salesBoxModel: _salesBoxModel,
+            ),
+          )
+        ],
+      );
+
+  Widget get _banner {
     return Container(
       height: 180,
       child: Swiper(
@@ -107,7 +112,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _appBar() {
+  Widget get _appBar {
     return Opacity(
       opacity: _appBarAlpha,
       child: Container(
@@ -134,7 +139,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _loadData() async {
+  Future<void> _handleRefresh() async {
     try {
       var homeModel = await HomeDao.fetch();
       setState(() {
