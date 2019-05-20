@@ -46,19 +46,17 @@ class _WebViewState extends State<WebView> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        //状态栏
         Container(
-          color: Color(int.parse('0xff${widget.statusBarColor ?? 'ffffff'}')),
+          color: Color(int.parse('0xff${widget.statusBarColor ?? '000000'}')),
           height: MediaQuery.of(context).padding.top,
+        ),
+        //appBar
+        Container(
+          child: widget.hideAppBar ?? false ? null : _appbar,
         ),
         Expanded(
             child: WebviewScaffold(
-          appBar: widget.hideAppBar ?? false
-              ? null
-              : AppBar(
-                  backgroundColor: Color(
-                      int.parse('0xff${widget.statusBarColor ?? '000000'}')),
-                  title: Text(widget.title ?? ''),
-                ),
           url: widget.url,
           withZoom: true,
           withLocalStorage: true,
@@ -70,6 +68,46 @@ class _WebViewState extends State<WebView> {
               )),
         ))
       ],
+    );
+  }
+
+  Widget get _appbar {
+    Color textColor;
+    Color appbarColor;
+    if (widget.statusBarColor == null) {
+      appbarColor = Colors.white;
+      textColor = Colors.black;
+    } else {
+      appbarColor = Color(int.parse('0xff${widget.statusBarColor}'));
+      textColor = Colors.white;
+    }
+
+    return Material(
+      child: Stack(
+        alignment: Alignment.centerLeft,
+        children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            height: 50,
+            decoration: BoxDecoration(color: appbarColor),
+            child: Text(
+              widget.title ?? '详情',
+              style: TextStyle(inherit: false, color: textColor, fontSize: 18),
+            ),
+          ),
+          Padding(
+              padding: EdgeInsets.all(10),
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: textColor,
+                ),
+              ))
+        ],
+      ),
     );
   }
 }

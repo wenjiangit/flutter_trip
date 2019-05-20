@@ -11,9 +11,14 @@ class SalesBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      margin: EdgeInsets.fromLTRB(8, 0, 8, 8),
-      child: _buildBox(context),
+      margin: EdgeInsets.all(8),
+      child: PhysicalModel(
+        elevation: 2,
+        clipBehavior: Clip.antiAlias,
+        borderRadius: BorderRadius.circular(6),
+        color: Colors.white,
+        child: _buildBox(context),
+      ),
     );
   }
 
@@ -35,13 +40,21 @@ class SalesBox extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WebView(
+                                url: salesBoxModel.moreUrl,
+                              )));
+                },
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: Colors.redAccent),
+                      gradient: LinearGradient(
+                          colors: [Colors.red, Colors.pinkAccent[100]])),
                   child: Text(
                     '获取更多福利 >',
                     style: TextStyle(fontSize: 12, color: Colors.white),

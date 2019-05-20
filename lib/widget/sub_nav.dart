@@ -11,8 +11,6 @@ class SubNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(6)),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
         child: _buildNav(context),
@@ -58,8 +56,8 @@ class SubNav extends StatelessWidget {
         children: <Widget>[
           Image.network(
             model.icon,
-            width: 22,
-            height: 22,
+            width: 20,
+            height: 20,
           ),
           Padding(
             padding: EdgeInsets.only(top: 5),
