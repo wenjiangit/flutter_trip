@@ -42,8 +42,6 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
-      height: 30,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
           color: widget.searchType == SearchType.home
@@ -91,18 +89,21 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   Widget _inputBox() {
-    return TextField(
-      controller: _controller,
-      autofocus: widget.searchType != SearchType.home,
-      onChanged: _onChange,
-      style: TextStyle(fontSize: 18, color: Colors.black),
-      enabled: widget.searchType != SearchType.home,
-      maxLines: 1,
-      decoration: InputDecoration(
-        hintText: widget.defaultContent,
-        border: InputBorder.none,
-        hintStyle: TextStyle(fontSize: 14),
-        contentPadding: EdgeInsets.only(top: 10),
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: TextField(
+        controller: _controller,
+        autofocus: widget.searchType != SearchType.home,
+        onChanged: _onChange,
+        style: TextStyle(fontSize: 18, color: Colors.black),
+        enabled: widget.searchType != SearchType.home,
+        maxLines: 1,
+        decoration: InputDecoration(
+          hintText: widget.defaultContent,
+          border: InputBorder.none,
+          hintStyle: TextStyle(fontSize: 15),
+          contentPadding: EdgeInsets.symmetric(horizontal: 5),
+        ),
       ),
     );
   }

@@ -11,23 +11,28 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   List<SearchItem> _searchList = [];
 
+  String _keyWords;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xfff2f2f2),
         body: Column(
           children: <Widget>[
-            _searchBar(context),
-            Expanded(
-                child: ListView.builder(
-              itemBuilder: _buildItem,
-              itemCount: _searchList.length,
-            ))
+            _appbar(context),
+            MediaQuery.removePadding(
+              removeTop: true,
+                context: context,
+                child: Expanded(
+                    child: ListView.builder(
+                  itemBuilder: _buildItem,
+                  itemCount: _searchList?.length ?? 0,
+                )))
           ],
         ));
   }
 
-  Widget _searchBar(BuildContext context) {
+  Widget _appbar(BuildContext context) {
     final paddingTop = MediaQuery.of(context).padding.top;
     return Container(
       color: Colors.white,
@@ -58,6 +63,7 @@ class _SearchPageState extends State<SearchPage> {
   void _onSearch() {}
 
   void _onTextChange(String value) async {
+    _keyWords = value;
     if (value.isEmpty) {
       setState(() {
         _searchList = [];
@@ -65,10 +71,13 @@ class _SearchPageState extends State<SearchPage> {
       return;
     }
     try {
-      var searchModel = await SearchDao.search(value);
-      setState(() {
-        _searchList = searchModel.data;
-      });
+      var searchModel = await SearchDao.fetch(value);
+      //当返回的结果与最新输入的关键字一致时才进行渲染
+      if (searchModel.keyWords == _keyWords) {
+        setState(() {
+          _searchList = searchModel.data;
+        });
+      }
     } catch (e) {
       print(e);
     }
