@@ -10,14 +10,16 @@ class SearchBar extends StatefulWidget {
   final ValueChanged<String> onTextChanged;
   final SearchType searchType;
   final VoidCallback onSpeakTap;
+  final Color backgroundColor;
 
   const SearchBar({
     Key key,
     this.onTap,
-    this.defaultContent,
+    this.defaultContent = '',
     this.onTextChanged,
     this.searchType = SearchType.search,
     this.onSpeakTap,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -41,34 +43,23 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      height: 40,
+      height: 30,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-          color: widget.searchType == SearchType.home ? Colors.white : bgColor,
-          borderRadius: BorderRadius.circular(
-              widget.searchType == SearchType.home ? 15 : 5)),
+          color: widget.searchType == SearchType.home
+              ? widget.backgroundColor
+              : bgColor,
+          borderRadius: BorderRadius.circular(15)),
       child: Row(
         children: <Widget>[
           Icon(
             Icons.search,
-            size: 24,
+            size: 22,
             color: widget.searchType == SearchType.home
                 ? Colors.blue
                 : inactiveColor,
           ),
-          Expanded(
-              child: TextField(
-                  controller: _controller,
-                  autofocus: true,
-                  onChanged: _onChange,
-                  style: TextStyle(fontSize: 18, color: Colors.black),
-                  enabled: widget.searchType != SearchType.home,
-                  decoration: InputDecoration(
-                    hintText: widget.defaultContent,
-                    border: InputBorder.none,
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  ))),
+          Expanded(child: _inputBox()),
           GestureDetector(
             onTap: () {
               if (_showClear) {
@@ -83,18 +74,35 @@ class _SearchBarState extends State<SearchBar> {
             child: _showClear
                 ? Icon(
                     Icons.close,
-                    size: 24,
+                    size: 22,
                     color: widget.searchType == SearchType.home
                         ? Colors.blue
                         : inactiveColor,
                   )
                 : Icon(
                     Icons.mic,
-                    size: 24,
+                    size: 22,
                     color: Colors.blue,
                   ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _inputBox() {
+    return TextField(
+      controller: _controller,
+      autofocus: widget.searchType != SearchType.home,
+      onChanged: _onChange,
+      style: TextStyle(fontSize: 18, color: Colors.black),
+      enabled: widget.searchType != SearchType.home,
+      maxLines: 1,
+      decoration: InputDecoration(
+        hintText: widget.defaultContent,
+        border: InputBorder.none,
+        hintStyle: TextStyle(fontSize: 14),
+        contentPadding: EdgeInsets.only(top: 10),
       ),
     );
   }
