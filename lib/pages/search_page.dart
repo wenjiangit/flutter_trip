@@ -2,6 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_trip/dao/search_dao.dart';
 import 'package:flutter_trip/model/search_model.dart';
 import 'package:flutter_trip/widget/search_bar.dart';
+import 'package:flutter_trip/widget/webview.dart';
+
+const TYPES = [
+  'channelgroup',
+  'gs',
+  'plane',
+  'train',
+  'cruise',
+  'district',
+  'food',
+  'hotel',
+  'huodong',
+  'shop',
+  'sight',
+  'ticket',
+  'travelgroup'
+];
 
 class SearchPage extends StatefulWidget {
   @override
@@ -21,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
           children: <Widget>[
             _appbar(context),
             MediaQuery.removePadding(
-              removeTop: true,
+                removeTop: true,
                 context: context,
                 child: Expanded(
                     child: ListView.builder(
@@ -85,10 +102,96 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _buildItem(BuildContext context, int index) {
     var searchItem = _searchList[index];
-    return Container(
-      alignment: Alignment.centerLeft,
-      height: 40,
-      child: Text(searchItem.word),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return WebView(
+            url: searchItem.url,
+            title: '详情',
+          );
+        }));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom: BorderSide(color: Color(0xfff2f2f2), width: 0.5))),
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.all(10),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: _typeIcon(searchItem.type),
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: _title(searchItem),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: _subTitle(searchItem),
+                ),
+              ],
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _title(SearchItem item) {
+    if (item == null) return null;
+    var split = item.word.split(_keyWords);
+    List<TextSpan> spans = [];
+
+    TextStyle normalStyle = TextStyle(fontSize: 16, color: Colors.black);
+    TextStyle keywordStyle =
+        TextStyle(fontSize: 16, color: Colors.orangeAccent);
+    for (var i = 0; i < split.length; i++) {
+      if (i % 2 == 1) {
+        spans.add(TextSpan(text: _keyWords, style: keywordStyle));
+      }
+      spans.add(TextSpan(text: split[i], style: normalStyle));
+    }
+
+    spans.add(TextSpan(
+        text: ' ${item.districtname ?? ''}  ${item.zonename ?? ''}',
+        style: TextStyle(fontSize: 16, color: Colors.grey)));
+
+    return RichText(
+      text: TextSpan(children: spans),
+    );
+  }
+
+  Widget _subTitle(SearchItem item) {
+    if (item == null) return null;
+    return RichText(
+        text: TextSpan(children: <TextSpan>[
+      TextSpan(
+          text: '${item.price ?? ''} ',
+          style: TextStyle(fontSize: 16, color: Colors.orange)),
+      TextSpan(
+          text: item.star ?? '',
+          style: TextStyle(fontSize: 14, color: Colors.grey)),
+    ]));
+  }
+
+  _typeIcon(String type) {
+    String myType = "travelgroup";
+    for (final typeName in TYPES) {
+      if (typeName.contains(type)) {
+        myType = typeName;
+        break;
+      }
+    }
+    return Image.asset(
+      'images/type_$myType.png',
+      width: 30,
+      height: 30,
     );
   }
 }

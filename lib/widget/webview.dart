@@ -5,17 +5,17 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class WebView extends StatefulWidget {
   final String title;
-  final String url;
+  String url;
   final String statusBarColor;
   final bool hideAppBar;
 
-  const WebView(
-      {Key key,
-      this.title,
-      @required this.url,
-      this.statusBarColor,
-      this.hideAppBar})
-      : super(key: key);
+  WebView(
+      {Key key, this.title, String url, this.statusBarColor, this.hideAppBar}) {
+
+    if (url != null && url.contains('ctrip')) {
+      this.url = url.replaceAll('http://', 'https://');
+    }
+  }
 
   @override
   _WebViewState createState() => _WebViewState();
@@ -61,6 +61,7 @@ class _WebViewState extends State<WebView> {
           withZoom: true,
           withLocalStorage: true,
           hidden: true,
+          userAgent: 'null',
           initialChild: Container(
               color: Colors.white,
               child: Center(

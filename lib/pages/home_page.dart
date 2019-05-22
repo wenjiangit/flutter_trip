@@ -123,40 +123,50 @@ class _HomePageState extends State<HomePage>
   Widget get _appBar {
     final topPadding = MediaQuery.of(context).padding.top;
     Color color = _appBarAlpha < 0.5 ? Colors.white : Colors.black54;
-    return Container(
-      height: topPadding + 50,
-      padding: EdgeInsets.only(top: topPadding),
-      decoration: BoxDecoration(
-          color: Color.fromARGB((_appBarAlpha * 255).toInt(), 255, 255, 255),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 0.5)],
-      ),
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 8),
-            child: Text(
-              '深圳',
-              style: TextStyle(color: color),
-            ),
+    return Column(
+      children: <Widget>[
+        Container(
+          height: topPadding + 50,
+          padding: EdgeInsets.only(top: topPadding),
+          decoration: BoxDecoration(
+            color: Color.fromARGB((_appBarAlpha * 255).toInt(), 255, 255, 255),
           ),
-          Icon(
-            Icons.expand_more,
-            color: color,
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: Text(
+                  '深圳',
+                  style: TextStyle(color: color),
+                ),
+              ),
+              Icon(
+                Icons.expand_more,
+                color: color,
+              ),
+              Expanded(
+                child: SearchBar(
+                  searchType: SearchType.home,
+                  onTap: () {},
+                  defaultContent: '网红打卡地 景点 酒店 美食',
+                  backgroundColor:
+                      _appBarAlpha < 0.5 ? Colors.white : Color(0xffEDEDED),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Icon(Icons.comment, color: color),
+              )
+            ],
           ),
-          Expanded(
-            child: SearchBar(
-              searchType: SearchType.home,
-              onTap: () {},
-              defaultContent: '网红打卡地 景点 酒店 美食',
-              backgroundColor: _appBarAlpha < 0.5 ? Colors.white : Color(0xffEDEDED),
-            ),
+        ),
+        Container(
+          height: _appBarAlpha > 0.5 ? 1 : 0,
+          decoration: BoxDecoration(
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 0.5)],
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Icon(Icons.comment, color: color),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 
