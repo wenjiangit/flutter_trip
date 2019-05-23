@@ -18,7 +18,6 @@ class _TabNavigatorState extends State<TabNavigator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       body: PageView(
         controller: _controller,
         children: <Widget>[
