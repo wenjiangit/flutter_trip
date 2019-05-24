@@ -56,6 +56,12 @@ class _TravelPageState extends State<TravelPage>
     );
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void _loadData() {
     TravelDao.fetch().then((TravelTabModel model) {
       _controller = TabController(length: model.tabs.length, vsync: this);
@@ -90,4 +96,3 @@ class _TravelPageState extends State<TravelPage>
     );
   }
 }
-
